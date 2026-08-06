@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Do you love me? 💖</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,700;1,9..144,500&family=Karla:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --night:#1A0716;
+    --plum:#3A0F32;
+    --rose:#FF4D8D;
+    --blush:#FFB3C7;
+    --gold:#FFD79A;
+    --cream:#FFF4EE;
+  }
+
+  *{ box-sizing:border-box; margin:0; padding:0; }
+
+  html,body{ height:100%; }
+
+  body{
+    font-family:'Karla', system-ui, -apple-system, sans-serif;
+    color:var(--cream);
+    background:
+      radial-gradient(120% 90% at 50% 0%, #5A1140 0%, transparent 55%),
+      radial-gradient(90% 70% at 85% 90%, #7A1B3D 0%, transparent 60%),
+      var(--night);
+    min-height:100%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:24px 16px;
+    overflow-x:hidden;
+    position:relative;
+  }
+
+  /* ---------- floating background hearts ---------- */
+  .sky{ position:fixed; inset:0; pointer-events:none; overflow:hidden; z-index:0; }
+  .sky span{
+    position:absolute;
+    bottom:-60px;
+    font-size:22px;
+    opacity:0;
+    animation:rise linear infinite;
+    filter:drop-shadow(0 0 12px rgba(255,77,141,.6));
+  }
+  @keyframes rise{
+    0%{ transform:translateY(0) rotate(0deg) scale(.7); opacity:0; }
+    12%{ opacity:.85; }
+    100%{ transform:translateY(-115vh) rotate(320deg) scale(1.15); opacity:0; }
+  }
+
+  /* ---------- card ---------- */
+  .stage{ position:relative; z-index:1; width:100%; max-width:640px; }
+
+  .card{
+    background:linear-gradient(160deg, rgba(255,255,255,.09), rgba(255,255,255,.03));
+    border:1px solid rgba(255,179,199,.28);
+    border-radius:28px;
+    padding:44px 30px 34px;
+    text-align:center;
+    backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);
+    box-shadow:0 30px 80px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.15);
+  }
+
+  .eyebrow{
+    font-size:12px; letter-spacing:.28em; text-transform:uppercase;
+    color:var(--blush); opacity:.8; margin-bottom:18px;
+  }
+
+  h1{
+    font-family:'Fraunces', Georgia, serif;
+    font-weight:700;
+    font-size:clamp(30px, 7.5vw, 52px);
+    line-height:1.12;
+    letter-spacing:-.02em;
+    background:linear-gradient(100deg, var(--cream) 10%, var(--blush) 55%, var(--gold) 95%);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+
+  .sub{
+    margin-top:14px; font-size:clamp(15px,3.6vw,18px);
+    color:var(--blush); opacity:.92;
+  }
+
+  .beat{
+    font-size:52px; display:inline-block; margin-bottom:6px;
+    animation:beat 1.15s ease-in-out infinite;
+  }
+  @keyframes beat{
+    0%,100%{ transform:scale(1); }
+    18%{ transform:scale(1.22); }
+    36%{ transform:scale(.96); }
+    54%{ transform:scale(1.14); }
+  }
+
+  /* ---------- buttons ---------- */
+  .arena{
+    position:relative;
+    margin-top:34px;
+    min-height:210px;
+  }
+
+  button{ font-family:inherit; cursor:pointer; border:none; }
+
+  .yes{
+    background:linear-gradient(135deg, #FF3D7F, #FF7AB0);
+    color:#fff;
+    font-size:20px; font-weight:700; letter-spacing:.01em;
+    padding:16px 44px;
+    border-radius:999px;
+    box-shadow:0 14px 34px rgba(255,61,127,.45);
+    transition:transform .25s cubic-bezier(.34,1.56,.64,1), box-shadow .25s;
+  }
+  .yes:hover{ transform:scale(1.06); box-shadow:0 18px 44px rgba(255,61,127,.6); }
+  .yes:active{ transform:scale(.97); }
+
+  .no{
+    position:absolute;
+    left:50%; top:96px;
+    transform:translateX(-50%);
+    background:rgba(255,255,255,.1);
+    color:var(--cream);
+    border:1px solid rgba(255,179,199,.4);
+    font-size:17px; font-weight:600;
+    padding:13px 32px;
+    border-radius:999px;
+    transition:left .28s cubic-bezier(.22,1,.36,1), top .28s cubic-bezier(.22,1,.36,1), transform .28s, font-size .28s, padding .28s;
+    white-space:nowrap;
+  }
+
+  button:focus-visible{ outline:3px solid var(--gold); outline-offset:4px; }
+
+  .taunt{
+    margin-top:6px; height:20px;
+    font-size:14px; color:var(--gold); opacity:0;
+    transition:opacity .3s;
+  }
+  .taunt.on{ opacity:.9; }
+
+  /* ---------- shayari ---------- */
+  .shayari{ display:none; }
+  .shayari.on{ display:block; animation:pop .7s cubic-bezier(.22,1,.36,1); }
+  @keyframes pop{
+    from{ opacity:0; transform:translateY(22px) scale(.94); }
+    to{ opacity:1; transform:none; }
+  }
+
+  .shayari .line{
+    font-family:'Fraunces', Georgia, serif;
+    font-style:italic;
+    font-weight:500;
+    font-size:clamp(19px,4.6vw,26px);
+    line-height:1.75;
+    color:var(--cream);
+    margin:6px 0;
+    opacity:0;
+    animation:fadeUp .6s ease forwards;
+  }
+  @keyframes fadeUp{
+    from{ opacity:0; transform:translateY(14px); }
+    to{ opacity:1; transform:none; }
+  }
+
+  .quotemark{
+    font-family:'Fraunces', serif; font-size:64px; line-height:0;
+    color:var(--rose); opacity:.55; display:block; margin-bottom:22px;
+  }
+
+  .more{
+    margin-top:32px;
+    background:transparent;
+    color:var(--gold);
+    border:1px solid rgba(255,215,154,.45);
+    padding:12px 28px; border-radius:999px;
+    font-size:15px; font-weight:600;
+    transition:background .2s, transform .2s;
+  }
+  .more:hover{ background:rgba(255,215,154,.14); transform:translateY(-2px); }
+
+  .foot{ margin-top:20px; font-size:13px; color:var(--blush); opacity:.6; }
+
+  /* ---------- confetti ---------- */
+  .burst{ position:fixed; inset:0; pointer-events:none; z-index:5; overflow:hidden; }
+  .burst i{
+    position:absolute; font-style:normal; font-size:26px;
+    animation:fall linear forwards;
+  }
+  @keyframes fall{
+    0%{ transform:translateY(-10vh) rotate(0); opacity:1; }
+    100%{ transform:translateY(110vh) rotate(540deg); opacity:0; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation:none !important; transition-duration:.01ms !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="sky" id="sky" aria-hidden="true"></div>
+<div class="burst" id="burst" aria-hidden="true"></div>
+
+<main class="stage">
+  <section class="card">
+
+    <!-- ASK SCREEN -->
+    <div id="ask">
+      <div class="eyebrow">ek chhota sa sawaal 💌</div>
+      <span class="beat" aria-hidden="true">❤️</span>
+      <h1>Do you love me? 🥺💖</h1>
+      <p class="sub">Sach sach batao... dil pe haath rakh ke 💕✨</p>
+
+      <div class="arena">
+        <button class="yes" id="yes">Yes 😍💘</button>
+        <button class="no" id="no">No 😐</button>
+      </div>
+
+      <p class="taunt" id="taunt"></p>
+    </div>
+
+    <!-- SHAYARI SCREEN -->
+    <div class="shayari" id="shayari">
+      <div class="eyebrow">tumne "Yes" kaha 🥹💞</div>
+      <span class="quotemark" aria-hidden="true">"</span>
+      <div id="poem"></div>
+      <button class="more" id="more">Ek aur sunao 🌹</button>
+      <p class="foot">Made with 💖 &nbsp;•&nbsp; Escalatech</p>
+    </div>
+
+  </section>
+</main>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ---------- floating hearts ---------- */
+  var glyphs = ["💖","💗","💓","💕","❤️","🌹","✨","💘","💞"];
+  var sky = document.getElementById("sky");
+  for (var i = 0; i < 26; i++){
+    var s = document.createElement("span");
+    s.textContent = glyphs[Math.floor(Math.random()*glyphs.length)];
+    s.style.left = Math.random()*100 + "vw";
+    s.style.fontSize = (14 + Math.random()*26) + "px";
+    s.style.animationDuration = (9 + Math.random()*11) + "s";
+    s.style.animationDelay = (Math.random()*12) + "s";
+    sky.appendChild(s);
+  }
+
+  /* ---------- the runaway "No" ---------- */
+  var no    = document.getElementById("no");
+  var yes   = document.getElementById("yes");
+  var arena = document.querySelector(".arena");
+  var taunt = document.getElementById("taunt");
+
+  var lines = [
+    "No 😐","Pakka? 🙄","Soch lo 😏","Dobara socho 🤨","Nahi ho payega 😅",
+    "Chhodo na 🙃","Arre yaar 😤","Try karte raho 😂","Ye button toota hai 🔧",
+    "Yes hi press karo 💅","Bhaag raha hoon 🏃‍♂️","Haar maan lo 😌"
+  ];
+  var taunts = [
+    "arey pakadna to padega 😆",
+    "itni aasani se nahi 😏",
+    "button bhi tumse pyaar karta hai 💘",
+    "haath thak jayega, dil nahi 😌",
+    "Yes wala button intezaar kar raha hai 👉💗"
+  ];
+
+  var dodges = 0;
+  var yesScale = 1;
+
+  function dodge(){
+    var pad = 8;
+    var maxX = arena.clientWidth  - no.offsetWidth  - pad;
+    var maxY = arena.clientHeight - no.offsetHeight - pad;
+    if (maxX < 0) maxX = 0;
+    if (maxY < 0) maxY = 0;
+
+    var x = pad + Math.random() * maxX;
+    var y = pad + Math.random() * maxY;
+
+    no.style.left = x + "px";
+    no.style.top  = y + "px";
+    no.style.transform = "rotate(" + (Math.random()*30 - 15) + "deg)";
+
+    dodges++;
+    no.textContent = lines[Math.min(dodges, lines.length - 1)];
+
+    // "No" shrinks, "Yes" grows — pyaar jeetta hai 💪
+    if (dodges > 2){
+      var shrink = Math.max(0.62, 1 - dodges * 0.035);
+      no.style.fontSize = (17 * shrink) + "px";
+      no.style.padding  = (13 * shrink) + "px " + (32 * shrink) + "px";
+    }
+    yesScale = Math.min(1.55, yesScale + 0.055);
+    yes.style.transform = "scale(" + yesScale + ")";
+
+    if (dodges % 3 === 0){
+      taunt.textContent = taunts[Math.floor(Math.random()*taunts.length)];
+      taunt.classList.add("on");
+      clearTimeout(taunt._t);
+      taunt._t = setTimeout(function(){ taunt.classList.remove("on"); }, 2200);
+    }
+  }
+
+  // desktop: hover pe bhaago
+  no.addEventListener("mouseenter", dodge);
+  no.addEventListener("mouseover",  dodge);
+  // mobile: chhune se pehle hi bhaago
+  no.addEventListener("touchstart", function(e){ e.preventDefault(); dodge(); }, {passive:false});
+  no.addEventListener("pointerdown", function(e){ e.preventDefault(); dodge(); });
+  // keyboard / kisi bhi tarah click hua to bhi kuch nahi hoga
+  no.addEventListener("click", function(e){ e.preventDefault(); dodge(); });
+
+  // cursor paas aate hi bhaag jaaye
+  document.addEventListener("mousemove", function(e){
+    var r = no.getBoundingClientRect();
+    var cx = r.left + r.width/2, cy = r.top + r.height/2;
+    var d = Math.hypot(e.clientX - cx, e.clientY - cy);
+    if (d < 95) dodge();
+  });
+
+  /* ---------- shayari ---------- */
+  var poems = [
+    ["Some people are moonlight —","soft, distant, gone by morning.","You are the sun inside my chest,","and I have not had a dark day since. ☀️💗"],
+    ["I did not fall in love with you.","I simply stopped pretending","that I hadn't already. 💘"],
+    ["If forever had a face,","it would wear your smile.","If home had a sound,","it would be you saying my name. 🏡❤️"],
+    ["The stars once asked me","what I wanted from the sky.","I said nothing —","I already have you. 🌙✨"],
+    ["Every love story has a beginning,","a middle, and an end.","Ours only has a beginning,","and it keeps starting again. 📖💞"],
+    ["You pressed one small button today","and made an entire heart feel seen.","Thank you for the 'Yes'. 😊💖"]
+  ];
+
+  var order = poems.map(function(_, i){ return i; }).sort(function(){ return Math.random() - .5; });
+  var ptr = 0;
+  var poemBox = document.getElementById("poem");
+
+  function showPoem(){
+    var p = poems[order[ptr % order.length]];
+    ptr++;
+    poemBox.innerHTML = "";
+    p.forEach(function(line, i){
+      var d = document.createElement("div");
+      d.className = "line";
+      d.textContent = line;
+      d.style.animationDelay = (i * 0.42 + 0.15) + "s";
+      poemBox.appendChild(d);
+    });
+  }
+
+  /* ---------- confetti ---------- */
+  var burst = document.getElementById("burst");
+  function rain(n){
+    for (var i = 0; i < n; i++){
+      (function(i){
+        setTimeout(function(){
+          var el = document.createElement("i");
+          el.textContent = glyphs[Math.floor(Math.random()*glyphs.length)];
+          el.style.left = Math.random()*100 + "vw";
+          el.style.fontSize = (18 + Math.random()*24) + "px";
+          el.style.animationDuration = (2.6 + Math.random()*2.4) + "s";
+          burst.appendChild(el);
+          setTimeout(function(){ el.remove(); }, 5200);
+        }, i * 55);
+      })(i);
+    }
+  }
+
+  /* ---------- Yes! ---------- */
+  yes.addEventListener("click", function(){
+    document.getElementById("ask").style.display = "none";
+    var sh = document.getElementById("shayari");
+    sh.classList.add("on");
+    showPoem();
+    rain(45);
+  });
+
+  document.getElementById("more").addEventListener("click", function(){
+    showPoem();
+    rain(14);
+  });
+})();
+</script>
+</body>
+</html>
